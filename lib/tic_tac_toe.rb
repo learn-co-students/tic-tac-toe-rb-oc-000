@@ -10,13 +10,13 @@ WIN_COMBINATIONS = [
 ]
 
 def play(board)
-  while !over?(board)
-    turn(board)
+        while !over?(board)
+                turn(board)
   end
 
-  if won?(board)
-    puts "Congratulations #{winner(board)}!"
-  elsif draw?(board)
+        if won?(board)
+                puts "Congratulations #{winner(board)}!"
+elsif draw?(board)
     puts "Cats Game!"
   end
 end
@@ -65,8 +65,7 @@ end
 
 def position_taken?(board, location)
   !(board[location].nil? || board[location] == " ")
-  # Creates a stop on RSpec
-  # !(board[location].nil? || board[location] == "")
+
 end
 
 def current_player(board)
