@@ -13,7 +13,7 @@ def move(board, location, current_player = "X")
 end
 
 def position_taken?(board, location)
-  board[location] != " " && board[location] != ""
+  !(board[location].nil? || board[location] == " ")
 end
 
 def valid_move?(board, position)
@@ -22,34 +22,20 @@ end
 
 def turn(board)
   puts "Please enter 1-9:"
-  input = gets.strip
-  if valid_move?(board, input)
-    move(board, input)
-  else
+  position = gets.strip
+  if !valid_move?(board, position)
     turn(board)
   end
+  move(board, position, current_player(board))
   display_board(board)
 end
 
 def turn_count(board)
-  turn_counter = -1
-  board_counter = 0
-  board.each do |position|
-    turn_counter += 1
-    if board[turn_counter] == "X" || board[turn_counter] == "O"
-      board_counter += 1
-      end
-  end
-    board_counter
+  board.count{|token| token == "X" || token == "O"}
 end
-
 
 def current_player(board)
-  if turn_count(board) % 2 == 0
-    "X"
-    else
-    "O"
-end
+   turn_count(board) % 2 == 0 ? "X" : "O"
 end
 
 WIN_COMBINATIONS =
@@ -77,28 +63,31 @@ def full?(board)
 end
 
 def draw?(board)
-  full?(board) && !won?(board)
+  !won?(board) && full?(board)
 end
 
 def over?(board)
-  won?(board) || full?(board) || draw?(board)
+  won?(board) || draw?(board)
 end
 
 def winner(board)
-  if winning_combo = won?(board)
-    board[winning_combo.first]
+  combo = won?(board)
+  if combo = won?(board)
+    board[combo[0]]
+    else
+    nil
   end
 end
 
 def play(board)
+  until over?(board)
     turn(board)
-  if over?(board)
-    if full?(board)
+  end
+
+  combo = won?(board)
     if won?(board)
-      puts "Congratulations #{current_player(board)}!"
-    else
+      puts "Congratulations #{winner(board)}!"
+    elsif draw?(board)
       puts "Cats Game!"
     end
   end
-  end
-end
